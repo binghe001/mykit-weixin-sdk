@@ -7,8 +7,11 @@
     <groupId>io.mykit.wexin.sdk</groupId>
     <artifactId>mykit-weixin-sdk</artifactId>
     <version>1.0.0</version>
+    <modules>
+        <module>mykit-weixin-sdk-common</module>
+    </modules>
     <packaging>pom</packaging>
-    <name>Mykit-Weixin-SDK</name>
+    <name>mykit-weixin-sdk</name>
     <description>微信开发解决方法顶级POM</description>
 
     <licenses>
