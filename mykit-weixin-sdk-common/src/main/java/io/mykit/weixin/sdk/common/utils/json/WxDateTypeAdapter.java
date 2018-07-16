@@ -16,6 +16,7 @@ import java.util.Date;
  */
 
 public class WxDateTypeAdapter extends TypeAdapter<Date> {
+
     @Override
     public void write(JsonWriter out, Date value) throws IOException {
         if(value == null){
