@@ -4,11 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.mykit.wexin.sdk</groupId>
+    <groupId>io.mykit.weixin.sdk</groupId>
     <artifactId>mykit-weixin-sdk</artifactId>
     <version>1.0.0</version>
     <modules>
         <module>mykit-weixin-sdk-common</module>
+        <module>mykit-weixin-sdk-mp</module>
     </modules>
     <packaging>pom</packaging>
     <name>mykit-weixin-sdk</name>
@@ -28,6 +29,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <httpclient.version>4.5</httpclient.version>
         <jetty.version>9.3.0.RC0</jetty.version>
+
+        <project.version>1.0.0</project.version>
     </properties>
 
     <dependencyManagement>
