@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Description: 标准的Session实现类
  */
 
-public class StandardSession  implements WxSession, InternalSession {
+public class StandardSession implements WxSession, InternalSession {
 
     /**
      * The string manager for this package.
