@@ -1,0 +1,46 @@
+package io.mykit.weixin.sdk.common.utils.json;
+
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import org.apache.commons.lang3.BooleanUtils;
+
+import java.io.IOException;
+
+/**
+ * @Author: liuyazhuang
+ * @Date: 2018/7/16 11:01
+ * @Description: 微信Boolean类型转换器
+ */
+
+public class WxBooleanTypeAdapter extends TypeAdapter<Boolean> {
+    @Override
+    public void write(JsonWriter out, Boolean value) throws IOException {
+        if(value == null){
+            out.nullValue();
+        }else{
+            out.value(value);
+        }
+    }
+
+    @Override
+    public Boolean read(JsonReader in) throws IOException {
+        JsonToken peek = in.peek();
+        switch (peek){
+            case BOOLEAN:
+                return in.nextBoolean();
+            case NULL:
+                in.nextNull();
+                return null;
+            case NUMBER:
+                return BooleanUtils.toBoolean(in.nextInt());
+            case STRING:
+                return BooleanUtils.toBoolean(in.nextString());
+            default:
+                throw new JsonParseException("Expected BOOLEAN or NUMBER but was " + peek);
+
+        }
+    }
+}
