@@ -1,0 +1,62 @@
+package io.mykit.weixin.sdk.mp.utils.requestexecuter.qrcode;
+
+import io.mykit.weixin.sdk.common.error.WxError;
+import io.mykit.weixin.sdk.common.error.WxErrorException;
+import io.mykit.weixin.sdk.common.type.WxType;
+import io.mykit.weixin.sdk.common.utils.fs.FileUtils;
+import io.mykit.weixin.sdk.common.utils.http.RequestHttp;
+import io.mykit.weixin.sdk.common.utils.http.okhttp.OkHttpProxyInfo;
+import io.mykit.weixin.sdk.mp.bean.result.WxMpQrCodeTicket;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.util.UUID;
+
+/**
+ * @Author: liuyazhuang
+ * @Date: 2018/7/16 16:20
+ * @Description: 二维码执行成功执行器
+ */
+
+public class QrCodeOkhttpRequestExecutor extends QrCodeRequestExecutor<OkHttpClient, OkHttpProxyInfo> {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public QrCodeOkhttpRequestExecutor(RequestHttp requestHttp) {
+        super(requestHttp);
+    }
+
+    @Override
+    public File execute(String uri, WxMpQrCodeTicket ticket) throws WxErrorException, IOException {
+        logger.debug("QrCodeOkhttpRequestExecutor is running");
+
+        if (ticket != null) {
+            if (uri.indexOf('?') == -1) {
+                uri += '?';
+            }
+            uri += uri.endsWith("?")
+                    ? "ticket=" + URLEncoder.encode(ticket.getTicket(), "UTF-8")
+                    : "&ticket=" + URLEncoder.encode(ticket.getTicket(), "UTF-8");
+        }
+
+        OkHttpClient client = requestHttp.getRequestHttpClient();
+        Request request = new Request.Builder().url(uri).get().build();
+        Response response = client.newCall(request).execute();
+        String contentTypeHeader = response.header("Content-Type");
+        if ("text/plain".equals(contentTypeHeader)) {
+            String responseContent = response.body().string();
+            throw new WxErrorException(WxError.fromJson(responseContent, WxType.MP));
+        }
+
+        try (InputStream inputStream = response.body().byteStream()) {
+            return FileUtils.createTmpFile(inputStream, UUID.randomUUID().toString(), "jpg");
+        }
+
+    }
+}
